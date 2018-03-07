@@ -5,6 +5,7 @@ import com.ljy.cartoon.service.consoles.ConsoleService;
 import com.ljy.cartoon.service.fronts.UserService;
 import com.ljy.cartoon.util.CommonUtil;
 import com.ljy.cartoon.util.CookieUtil;
+import com.ljy.cartoon.util.Userutils;
 import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -76,7 +77,7 @@ public class LoginController {
         //md5加密密码
         String userPassword = CommonUtil.string2MD5(params.get("userPassword")+"");
 
-        Cartoonuser cartoonuser = new Cartoonuser(params.get("loginName")+"",userPassword);
+        Cartoonuser cartoonuser = new Cartoonuser(params.get("loginname")+"",userPassword);
         cartoonuser.setIsconsole(1);
 
         //登录成功，跳转主页面
@@ -117,18 +118,24 @@ public class LoginController {
      */
     @RequestMapping(value = "menuTree")
     @ResponseBody
-    public Map<String,Object> menuTree(@RequestParam Map<String,Object> params){
+    public Map<String,Object> menuTree(@RequestParam Map<String,Object> params, HttpServletRequest request){
         Map<String,Object> result = new HashMap<>();
+        try {
+            String loginname = Userutils.getloginname(request,Userutils.CONSOLE_COOKIE_NAME);
+            List<Map<String,Object>> list = consoleService.getUserMenu(params);
+            if("admin".equals(loginname) || "系统管理员".equals(loginname)){
+                list = consoleService.getUserMenu4admin(params);
+            }
 
-        List<Map<String,Object>> list = consoleService.getUserMenu(params);
+            for(Map<String,Object> map : list){
+                map.put("pId",map.get("parentsourceid"));
+                map.put("name",map.get("sourcename"));
+                map.put("open",true);
+            }
+            result.put("menuList",list);
+        }catch (Exception e){
 
-        for(Map<String,Object> map : list){
-            map.put("pId",map.get("parentsourceid"));
-            map.put("name",map.get("sourcename"));
-            map.put("open",true);
         }
-
-        result.put("menuList",list);
         return result;
     }
 

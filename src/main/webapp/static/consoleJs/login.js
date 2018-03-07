@@ -12,7 +12,7 @@ $(function () {
     checkCodePre = drawPic();
 
     $("#signIn").click(function () {
-        var loginName = $("#loginName").val();
+        var loginName = $("#loginname").val();
         var password = $("#userPassword").val();
         var checkCode = $("#checkCode").val();
 

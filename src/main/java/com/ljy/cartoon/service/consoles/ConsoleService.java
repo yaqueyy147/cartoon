@@ -33,4 +33,5 @@ public interface ConsoleService {
 
     public List<Map<String,Object>> getUserMenu(Map<String,Object> params);
 
+    public List<Map<String,Object>> getUserMenu4admin(Map<String,Object> params);
 }

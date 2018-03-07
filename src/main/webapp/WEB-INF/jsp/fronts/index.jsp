@@ -46,19 +46,11 @@
     <nav class="navbar navbar-default">
         <form class="navbar-form navbar-left searchForm" role="search">
             <div class="form-group">
-                <input type="text" id="familyName" name="familyName" class="form-control" placeholder="族谱名">
+                <input type="text" id="cartoonname" name="cartoonname" class="form-control" placeholder="动漫名">
             </div>
-            <div class="form-group">
-                <input type="text" id="searchname" name="searchname" class="form-control" placeholder="姓名">
-            </div>
-            <div class="form-group addressSelect" data-toggle="distpicker">
-                <select id="province" name="province" data-province="---- 选择省 ----"></select>
-                <select id="city" name="city" data-city="---- 选择市 ----"></select>
-                <select id="district" name="district" data-district="---- 选择区 ----"></select>
-            </div>
+
             <button type="button" id="searchBtn" class="btn btn-default">查询</button>
         </form>
-        <div class="peoplecount">族谱总人数：${totalCount}人</div>
     </nav>
     <div class="row" id="familyContent">
         <c:forEach var="family" items="${familyList}">

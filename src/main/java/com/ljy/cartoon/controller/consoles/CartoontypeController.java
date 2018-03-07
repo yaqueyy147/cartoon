@@ -58,8 +58,8 @@ public class CartoontypeController {
                 cartoontype.setRemark(old.getRemark());
             }else{
                 cartoontype.setId(CommonUtil.uuid());
-                cartoontype.setCreateid(Userutils.getuserid(request));
-                cartoontype.setCreatename(Userutils.getusername(request));
+                cartoontype.setCreateid(Userutils.getuserid(request,Userutils.FRONG_COOKIE_NAME));
+                cartoontype.setCreatename(Userutils.getusername(request,Userutils.FRONG_COOKIE_NAME));
                 cartoontype.setCreatedate(new Date());
             }
             cartoontypeDao.save(cartoontype);

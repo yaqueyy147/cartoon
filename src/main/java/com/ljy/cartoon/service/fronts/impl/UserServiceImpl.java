@@ -89,7 +89,7 @@ public class UserServiceImpl implements UserService {
             sql += " and loginname='"+ cartoonuser.getLoginname() + "'" ;
         }
         if(!CommonUtil.isBlank(cartoonuser.getUsername())){
-            sql += " and username='"+ cartoonuser.getPassword() + "'" ;
+            sql += " and username='"+ cartoonuser.getUsername() + "'" ;
         }
         if(!CommonUtil.isBlank(cartoonuser.getPassword())){
             sql += " and password='"+ cartoonuser.getPassword() + "'" ;

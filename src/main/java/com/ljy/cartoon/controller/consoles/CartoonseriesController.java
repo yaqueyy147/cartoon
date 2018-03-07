@@ -58,8 +58,8 @@ public class CartoonseriesController {
                 cartoonseries.setRemark(old.getRemark());
             }else{
                 cartoonseries.setId(CommonUtil.uuid());
-                cartoonseries.setCreateid(Userutils.getuserid(request));
-                cartoonseries.setCreatename(Userutils.getusername(request));
+                cartoonseries.setCreateid(Userutils.getuserid(request,Userutils.FRONG_COOKIE_NAME));
+                cartoonseries.setCreatename(Userutils.getusername(request,Userutils.FRONG_COOKIE_NAME));
                 cartoonseries.setCreatedate(new Date());
             }
             cartoonseriesDao.save(cartoonseries);

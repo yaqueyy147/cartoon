@@ -48,15 +48,15 @@
 <body class="layout">
 <div class="easyui-layout" style="width:100%;height:100%;">
     <div id="topRegion" data-options="region:'north'" style="height:50px;">
-        <div id="logoDiv">寻根问祖</div>
+        <div id="logoDiv">世纪动漫</div>
         <div id="userInfoDiv" class="userInfo">
             <a href="javascript:void 0;" class="easyui-menubutton"
                data-options="menu:'#mm'">
-                <c:if test="${empty consoleUserInfo.userName}">
-                    ${consoleUserInfo.loginName}
+                <c:if test="${empty consoleUserInfo.username}">
+                    ${consoleUserInfo.loginname}
                 </c:if>
-                <c:if test="${!empty consoleUserInfo.userName}">
-                    ${consoleUserInfo.userName}
+                <c:if test="${!empty consoleUserInfo.username}">
+                    ${consoleUserInfo.username}
                 </c:if>
             </a>
             <div id="mm" style="width:150px;">
@@ -112,19 +112,18 @@
         <form id="userInfoForm" method="post">
             <input type="hidden" id="userId" name="id" value="${consoleUserInfo.id}" />
             <input type="hidden" id="state" name="state" value="${consoleUserInfo.state}" />
-            <input type="hidden" id="isFront" name="isFront" value="${consoleUserInfo.isFront}" />
-            <input type="hidden" id="isConsole" name="isConsole" value="${consoleUserInfo.isConsole}" />
-            <input type="hidden" id="isVolunteer" name="isVolunteer" value="${consoleUserInfo.isVolunteer}" />
-            <input type="hidden" id="userFrom" name="userFrom" value="${consoleUserInfo.userFrom}" />
-            <input type="hidden" id="userPhoto" name="userPhoto" value="" />
-            <input type="hidden" id="idCardPhoto" name="idCardPhoto" value="" />
-            <input type="hidden" value="${consoleUserInfo.userPassword}" id="password" name="password" />
+            <input type="hidden" id="isfront" name="isfront" value="${consoleUserInfo.isfront}" />
+            <input type="hidden" id="isconsole" name="isconsole" value="${consoleUserInfo.isvonsole}" />
+            <input type="hidden" id="userfrom" name="userfrom" value="${consoleUserInfo.userfrom}" />
+            <input type="hidden" id="userphoto" name="userphoto" value="" />
+            <input type="hidden" id="idcardphoto" name="idcardphoto" value="" />
+            <input type="hidden" value="${consoleUserInfo.password}" id="password" name="password" />
             <table cellpadding="5">
                 <tr>
                     <td>登录账号:</td>
-                    <td><input value="" type="text" id="loginName" name="loginName" readonly/></td>
+                    <td><input value="" type="text" id="loginname" name="loginname" readonly/></td>
                     <td>用户名/真实姓名:</td>
-                    <td><input value="" type="text" id="userName" name="userName" /></td>
+                    <td><input value="" type="text" id="username" name="username" /></td>
                 </tr>
 
                 <tr>
@@ -134,7 +133,7 @@
                     </td>
                     <td>QQ:</td>
                     <td>
-                        <input value="" type="text" id="qqNum" name="qqNum"/>
+                        <input value="" type="text" id="qqnum" name="qqnum"/>
                     </td>
                 </tr>
                 <tr>
@@ -142,8 +141,6 @@
                     <td>
                         <input value="" type="text" id="wechart" name="wechart" />
                     </td>
-                    <td>身份证号:</td>
-                    <td><input type="text" id="idCard" name="idCard" /></td>
                 </tr>
                 <tr>
                     <td>地址:</td>

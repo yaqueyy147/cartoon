@@ -10,21 +10,24 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class Userutils {
 
-    public static Cartoonuser getcookieuser(HttpServletRequest request) throws Exception{
-        JSONObject jsonUser = CookieUtil.cookieValueToJsonObject(request,"userInfo");
+    public static final String FRONG_COOKIE_NAME = "userInfo";
+    public static final String CONSOLE_COOKIE_NAME = "consoleUserInfo";
+
+    public static Cartoonuser getcookieuser(HttpServletRequest request, String cookiename) throws Exception{
+        JSONObject jsonUser = CookieUtil.cookieValueToJsonObject(request,cookiename);
         Cartoonuser cartoonuser = (Cartoonuser)JSONObject.toBean(jsonUser,Cartoonuser.class);
         return cartoonuser;
     }
 
-    public static String getuserid(HttpServletRequest request) throws Exception{
-        return getcookieuser(request).getId();
+    public static String getuserid(HttpServletRequest request, String cookiename) throws Exception{
+        return getcookieuser(request,cookiename).getId();
     }
 
-    public static String getusername(HttpServletRequest request) throws Exception{
-        return getcookieuser(request).getUsername();
+    public static String getusername(HttpServletRequest request, String cookiename) throws Exception{
+        return getcookieuser(request,cookiename).getUsername();
     }
 
-    public static String getloginname(HttpServletRequest request) throws Exception{
-        return getcookieuser(request).getLoginname();
+    public static String getloginname(HttpServletRequest request, String cookiename) throws Exception{
+        return getcookieuser(request,cookiename).getLoginname();
     }
 }

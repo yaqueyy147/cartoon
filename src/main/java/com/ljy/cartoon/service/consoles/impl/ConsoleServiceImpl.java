@@ -182,9 +182,16 @@ public class ConsoleServiceImpl implements ConsoleService {
     public List<Map<String,Object>> getUserMenu(Map<String,Object> params){
 
         String sql = "select t1.*,t2.userid from consoleresource t1,userresource t2";
-        sql += " where t1.id=t2.resourceid and t2.userid=? and t2.state=1";
+        sql += " where t1.id=t2.resourceid and t1.state=1 and t2.userid='" + params.get("userid") + "'";
+        List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
+        return list;
+    }
 
-        List<Map<String,Object>> list = jdbcTemplate.queryForList(sql,params.get("userid"));
+    @Override
+    public List<Map<String, Object>> getUserMenu4admin(Map<String, Object> params) {
+        String sql = "select *from consoleresource";
+        sql += " where state=1";
+        List<Map<String,Object>> list = jdbcTemplate.queryForList(sql);
         return list;
     }
 

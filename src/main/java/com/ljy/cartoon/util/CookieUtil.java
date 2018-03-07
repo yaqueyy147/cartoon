@@ -125,11 +125,13 @@ public class CookieUtil {
         Cookie[] cookies = request.getCookies();
 
         //遍历设置cookie的什么周期为0  添加到response则表示销毁
-        for (Cookie cookie : cookies){
-            cookie.setMaxAge(0);
+        if(!CommonUtil.isBlank(cookies) && cookies.length > 0){
+            for (Cookie cookie : cookies){
+                cookie.setMaxAge(0);
 //            cookie.setDomain("localhost");
-            cookie.setPath("/");
-            response.addCookie(cookie);
+                cookie.setPath("/");
+                response.addCookie(cookie);
+            }
         }
 
     }
