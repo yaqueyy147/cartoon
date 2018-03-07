@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+	<bean class="com.ljy.cartoon.dao.CartoonuserDao" id="cartoonuserDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean class="com.ljy.cartoon.dao.ConsoleresourceDao" id="consoleresourceDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean class="com.ljy.cartoon.dao.UserresourceDao" id="userresourceDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean class="com.ljy.cartoon.dao.CartooninfoDao" id="cartooninfoDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean class="com.ljy.cartoon.dao.CartoonpicDao" id="cartoonpicDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean class="com.ljy.cartoon.dao.CartoonseriesDao" id="cartoonseriesDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+	<bean class="com.ljy.cartoon.dao.CartoontotypeDao" id="cartoontotypeDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+	<bean class="com.ljy.cartoon.dao.CartoontypeDao" id="cartoontypeDao">
+		<property name="sessionFactory" ref="sessionFactory" />
+	</bean>
+
+</beans>

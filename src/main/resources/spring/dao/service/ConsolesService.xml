@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+	
+   <!--后台service-->
+	<bean id="consoleService" class="com.ljy.cartoon.service.consoles.impl.ConsoleServiceImpl">
+		<property name="cartoonuserDao" ref="cartoonuserDao" />
+		<property name="consoleresourceDao" ref="consoleresourceDao" />
+		<property name="userresourceDao" ref="userresourceDao" />
+	</bean>
+
+</beans>

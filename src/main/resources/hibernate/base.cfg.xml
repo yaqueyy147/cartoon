@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC "-//Hibernate/Hibernate Configuration DTD 3.0//EN" 
+	"http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+
+<hibernate-configuration>
+	<!--session-factory name="ecsc"-->
+	<session-factory>
+            <property name="connection.url">jdbc:mysql://localhost:3307/cartoonweb</property>
+            <property name="connection.driver_class">com.mysql.jdbc.Driver</property>
+            <mapping class="com.ljy.cartoon.domain.Cartooninfo"/>
+            <mapping class="com.ljy.cartoon.domain.Cartoonpic"/>
+            <mapping class="com.ljy.cartoon.domain.Cartoonseries"/>
+            <mapping class="com.ljy.cartoon.domain.Cartoontotype"/>
+            <mapping class="com.ljy.cartoon.domain.Cartoontype"/>
+            <mapping class="com.ljy.cartoon.domain.Cartoonuser"/>
+            <mapping class="com.ljy.cartoon.domain.Consoleresource"/>
+            <mapping class="com.ljy.cartoon.domain.Userresource"/>
+    </session-factory>
+</hibernate-configuration>
