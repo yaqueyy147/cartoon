@@ -1,6 +1,8 @@
 package com.ljy.cartoon.controller.consoles;
 
+import com.ljy.cartoon.dao.CartooninfoDao;
 import com.ljy.cartoon.dao.CartoonseriesDao;
+import com.ljy.cartoon.domain.Cartooninfo;
 import com.ljy.cartoon.domain.Cartoonseries;
 import com.ljy.cartoon.service.CartoonService;
 import com.ljy.cartoon.util.CommonUtil;
@@ -32,6 +34,9 @@ public class CartoonseriesController {
     @Autowired
     private CartoonService cartoonService;
 
+    @Autowired
+    private CartooninfoDao cartooninfoDao;
+
     @RequestMapping(value = "/series")
     public ModelAndView type(Model model){
         return new ModelAndView("/consoles/series");
@@ -40,7 +45,9 @@ public class CartoonseriesController {
     @RequestMapping(value = "/serieslist")
     @ResponseBody
     public Object serieslist(@RequestParam Map<String,Object> params){
-        List<Cartoonseries> serieslist = cartoonseriesDao.find(params);
+
+        params.put("orderby","order by seriesnum desc");
+        List<Cartoonseries> serieslist = cartoonService.getCartoonseriesList(params);
         return serieslist;
     }
 
@@ -58,29 +65,43 @@ public class CartoonseriesController {
                 cartoonseries.setRemark(old.getRemark());
             }else{
                 cartoonseries.setId(CommonUtil.uuid());
-                cartoonseries.setCreateid(Userutils.getuserid(request,Userutils.FRONG_COOKIE_NAME));
-                cartoonseries.setCreatename(Userutils.getusername(request,Userutils.FRONG_COOKIE_NAME));
+                cartoonseries.setCreateid(Userutils.getuserid(request,Userutils.CONSOLE_COOKIE_NAME));
+                cartoonseries.setCreatename(Userutils.getusername(request,Userutils.CONSOLE_COOKIE_NAME));
                 cartoonseries.setCreatedate(new Date());
             }
             cartoonseriesDao.save(cartoonseries);
+            //更新集数
+            Cartooninfo cartooninfo = cartooninfoDao.get(cartoonseries.getCartoonid());
+            cartooninfo.setCartoonseriesnum(cartoonseries.getSeriesnum());
+            cartooninfoDao.save(cartooninfo);
             result.put("code",1);
+            result.put("msg","保存成功");
         }catch (Exception e){
             e.printStackTrace();
             result.put("code",0);
+            result.put("msg","保存失败");
         }
         return result;
     }
 
     @RequestMapping(value = "deleteseries")
     @ResponseBody
-    public Object deletetype(HttpServletRequest request,String ids){
+    public Object deletetype(HttpServletRequest request,String ids, String cartoonid){
         Map<String,Object> result = new HashMap<String,Object>();
         try {
+            String[] idarr = ids.split(",");
+
             int i = cartoonService.deletesomething(ids,"cartoonseries");
+            //更新集数
+            Cartooninfo cartooninfo = cartooninfoDao.get(cartoonid);
+            cartooninfo.setCartoonseriesnum((CommonUtil.parseInt(cartooninfo.getCartoonseriesnum()) - idarr.length) + "");
+            cartooninfoDao.save(cartooninfo);
             result.put("code",1);
+            result.put("msg","删除成功");
         }catch (Exception e){
             e.printStackTrace();
             result.put("code",0);
+            result.put("msg","删除失败");
         }
         return result;
     }

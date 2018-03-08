@@ -82,7 +82,7 @@
                 <div class="col-sm-offset-4 col-sm-10">
                     <button class="btn btn-primary bbtt" style="margin-bottom: 20px;" id="regedit" type="button">注 册</button>
                     &nbsp;&nbsp;
-                    <a class="btn btn-primary bbtt" style="margin-bottom: 20px;" href="<%=request.getContextPath()%>/cartoon/index" type="button">取 消</a>
+                    <a class="btn btn-primary bbtt" style="margin-bottom: 20px;" href="<%=request.getContextPath()%>/fronts/index" type="button">取 消</a>
                 </div>
             </div>
 

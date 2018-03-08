@@ -18,9 +18,9 @@ $(function () {
         }
     });
 
-    $("#familyDialog").dialog({
+    $("#cartoonDialog").dialog({
         width: 800,
-        height: 550,
+        height: 600,
         closed: true,
         cache: false,
         modal: true,
@@ -28,28 +28,32 @@ $(function () {
             {
                 "text":"提交",
                 handler:function(){
-                    if($.trim($("#familyName")).length <= 0){
-                        alert("请输入家族名称！");
+                    if($.trim($("#cartoonname")).length <= 0){
+                        $.messager.alert('提示',"请输入动漫名称！");
                         return;
                     }
-                    if($.trim($("#province")).length <= 0){
-                        alert("请选择家族所在省！");
+                    var chkcartoontype = $("input[name='cartoontype']:checked");
+                    if(chkcartoontype.length <= 0){
+                        $.messager.alert('提示',"请至少选择一个类型！");
                         return;
                     }
-                    if($.trim($("#city")).length <= 0){
-                        alert("请选择家族所在市！");
-                        return;
+                    var typeidstr = "";
+                    var typedescstr = "";
+                    for(var i=0;i<chkcartoontype.length;i++){
+                        var ii = chkcartoontype[i];
+                        typeidstr += "," + $(ii).attr("data-typeid");
+                        typedescstr += "," + $(ii).attr("data-typename");
                     }
-                    if($.trim($("#district")).length <= 0){
-                        alert("请选择家族所在区县！");
-                        return;
-                    }
+                    typeidstr = typeidstr.substring(1);
+                    typedescstr = typedescstr.substring(1);
                     var formData = {};
-                    var postUrl = projectUrl + "/consoles/saveFamily";
-                    var testData = $("#familyForm").serializeArray();
+                    var postUrl = projectUrl + "/consoles/saveCartoon";
+                    var testData = $("#cartoonForm").serializeArray();
                     for (var item in testData) {
                         formData["" + testData[item].name + ""] = testData[item].value;
                     }
+                    formData["typeidstr"] = typeidstr;
+                    formData["typedescstr"] = typedescstr;
                     $.ajax({
                         type:'post',
                         url: postUrl,
@@ -58,12 +62,11 @@ $(function () {
                         // async:false,
                         success:function (data) {
 
-                            alert(data.msg);
+                            $.messager.alert('提示',data.msg);
                             if(data.code >= 1){
-                                var params = {};
-                                loadFamilyList(params);
-                                $("#familyForm").form('clear');
-                                closeDialog("familyDialog");
+                                dosearch();
+                                $("#cartoonForm").form('clear');
+                                closeDialog("cartoonDialog");
                             }
                         },
                         error:function (data) {
@@ -80,42 +83,137 @@ $(function () {
             {
                 "text":"取消",
                 handler:function () {
-                    $("#userInfoForm").form('clear');
-                    closeDialog("familyDialog");
+                    $("#cartoonForm").form('clear');
+                    closeDialog("cartoonDialog");
+                }
+            }
+        ]
+    });
+
+    $("#cartoonseriesListDialog").dialog({
+        width: 1080,
+        height: 600,
+        closed: true,
+        cache: false,
+        modal: true,
+        "buttons":[
+            {
+                "text":"关闭",
+                handler:function () {
+                    closeDialog("cartoonseriesListDialog");
+                }
+            }
+        ]
+    });
+
+    $("#cartoonseriesInfoDialog").dialog({
+        width: 800,
+        height: 600,
+        closed: true,
+        cache: false,
+        modal: true,
+        "buttons":[
+            {
+                "text":"提交",
+                handler:function(){
+                    var cartoonid=$("#cartoonId4seriesbase").val();
+                    if($.trim($("#seriestitle")).length <= 0){
+                        $.messager.alert('提示',"请输入剧集标题！");
+                        return;
+                    }
+                    var formData = {};
+                    var postUrl = projectUrl + "/consoles/saveseries";
+                    var testData = $("#cartoonseriesForm").serializeArray();
+                    for (var item in testData) {
+                        formData["" + testData[item].name + ""] = testData[item].value;
+                    }
+                    $.ajax({
+                        type:'post',
+                        url: postUrl,
+                        dataType:'json',
+                        data:formData,
+                        // async:false,
+                        success:function (data) {
+
+                            $.messager.alert('提示',data.msg);
+                            if(data.code >= 1){
+                                var params = {cartoonid:cartoonid};
+                                loadcartoonseriesList(params);
+                                $("#cartoonseriesForm").form('clear');
+                                closeDialog("cartoonseriesInfoDialog");
+                                dosearch();
+                            }
+                        },
+                        error:function (data) {
+                            var responseText = data.responseText;
+                            if(responseText.indexOf("登出跳转页面") >= 0){
+                                ajaxErrorToLogin();
+                            }else{
+                                alert(JSON.stringify(data));
+                            }
+                        }
+                    });
+                }
+            },
+            {
+                "text":"取消",
+                handler:function () {
+                    $("#cartoonseriesForm").form('clear');
+                    closeDialog("cartoonseriesInfoDialog");
                 }
             }
         ]
     });
 
     $("#doSearch").click(function () {
-        var params = {};
-        params.familyName = $("#familyName4Search").val();
-        params.province = $("#province4Search").val();
-        params.city = $("#city4Search").val();
-        params.district = $("#district4Search").val();
-        loadFamilyList(params);
+        dosearch();
     });
 
     $("#toAdd").click(function () {
-        $("#familyForm")[0].reset();
-        $("#familyId").val(0);
-        $("#createMan").val("");
-        $("#familyArea").val(0);
+        $("#cartoonForm").form('clear');
+        $("#cartoonForm")[0].reset();
+        $("#cartoonId").val(0);
 
+        $("#result_img").attr('src', "");
         $("#result_img").hide();
-        $("#imgFile").show();
-        $("#photoUrl").removeAttr('value');
-        $("#show_img").unbind('mouseover');
-        $("#show_img").unbind('mouseout');
-        $("#province").val("");
-        $("#province").change();
+        $("#resultimg-div").hide();
+        $("#imgFile-pp").show();
+        $("#cartoonpic").attr('value', "");
+        $("#upload-div").show();
 
-        $("#familyDialog").dialog('open');
+        // $("#result_img").hide();
+        // $("#imgFile").show();
+        // $("#cartoonpic").removeAttr('value');
+        // $("#show_img").unbind('mouseover');
+        // $("#show_img").unbind('mouseout');
+
+        $("#cartoonDialog").dialog('open');
+    });
+
+    $("#toAdd01").click(function () {
+        $("#cartoonseriesForm").form('clear');
+        $("#cartoonseriesForm")[0].reset();
+        $("#cartoonseriesId").val("");
+        $("#cartoonId4series").val($("#cartoonId4seriesbase").val());
+        $("#result_img01").attr('src', "");
+        $("#result_img01").hide();
+        $("#resultimg-div01").hide();
+        $("#seriespic").attr('value', "");
+        $("#upload-div01").show();
+
+        var rows=$('#cartoonseriesList').datagrid("getRows");
+        var seriesnum = 1;
+        if(rows.length > 0){
+            seriesnum = parseInt(rows[0].seriesnum) + 1;
+        }
+        $("#seriesnum").val(seriesnum);
+
+        $("#cartoonseriesInfoDialog").dialog('open');
     });
 
     $("#toEdit").click(function () {
-        $("#familyForm").form('clear');
-        var selectRows = $("#familyList").datagrid('getSelections');
+        $("#cartoonForm").form('clear');
+        var selectRows = $("#cartoonList").datagrid('getSelections');
         if(selectRows.length > 1){
             alert("只能编辑一条数据!");
             return;
@@ -125,44 +223,94 @@ $(function () {
             return;
         }
         loadDataToForm(selectRows[0]);
-        $("#familyDialog").dialog('open');
+        $("#cartoonDialog").dialog('open');
+    });
+
+    $("#toEdit01").click(function () {
+        $("#cartoonseriesForm").form('clear');
+        var selectRows = $("#cartoonseriesList").datagrid('getSelections');
+        if(selectRows.length > 1){
+            alert("只能编辑一条数据!");
+            return;
+        }
+        if(selectRows.length < 1){
+            alert("请选择一条数据!");
+            return;
+        }
+        loadDataToForm01(selectRows[0]);
+        $("#cartoonseriesInfoDialog").dialog('open');
     });
 
     $("#toDel").click(function () {
-        var selectRows = $("#familyList").datagrid('getSelections');
+        var selectRows = $("#cartoonList").datagrid('getSelections');
         if(selectRows.length < 1){
             alert("请至少选择一条数据!");
             return;
         }
         var selectIds = "";
         var selectNames = [];
-        var peopleCount = [];
         for(var i=0;i<selectRows.length;i++){
             var ii = selectRows[i];
             selectIds += "," + ii.id;
-            selectNames.push(ii.familyName);
-            if(ii.peopleCount > 0){
-                peopleCount.push(ii.familyName + "(" + ii.id + ")");
-            }
+            selectNames.push(ii.cartoonname);
 
         }
-        if(peopleCount.length > 0){
-            alert("家族(" + peopleCount + ")中含有成员，不能删除！如需删除，请先删除其成员！");
-            return;
-        }
         selectIds = selectIds.substring(1);
-        $.messager.confirm('提示','确定要删除族谱(' + selectNames + ')  吗?',function(r){
+        $.messager.confirm('提示','确定要删除(' + selectNames + ')  吗?',function(r){
             if (r){
                 $.ajax({
                     type:'post',
-                    url: projectUrl + "/consoles/deleteFamily",
+                    url: projectUrl + "/consoles/deleteCartoon",
                     // async:false,
                     dataType:'json',
                     data:{ids:selectIds},
                     success:function (data) {
-                        alert(data.msg);
-                        var params = {};
-                        loadFamilyList(params);
+                        $.messager.alert('提示',data.msg);
+                        dosearch();
+                    },
+                    error:function (data) {
+                        var responseText = data.responseText;
+                        if(responseText.indexOf("登出跳转页面") >= 0){
+                            ajaxErrorToLogin();
+                        }else{
+                            alert(JSON.stringify(data));
+                        }
+                    }
+                });
+            }
+        });
+    });
+
+    $("#toDel01").click(function () {
+        var selectRows = $("#cartoonseriesList").datagrid('getSelections');
+        if(selectRows.length < 1){
+            alert("请至少选择一条数据!");
+            return;
+        }
+        var selectIds = "";
+        var selectNames = [];
+        for(var i=0;i<selectRows.length;i++){
+            var ii = selectRows[i];
+            selectIds += "," + ii.id;
+            selectNames.push(ii.seriestitle);
+
+        }
+        selectIds = selectIds.substring(1);
+        var cartoonid=$("#cartoonId4seriesbase").val();
+        $.messager.confirm('提示','确定要删除(' + selectNames + ')  吗?',function(r){
+            if (r){
+                $.ajax({
+                    type:'post',
+                    url: projectUrl + "/consoles/deleteseries",
+                    // async:false,
+                    dataType:'json',
+                    data:{ids:selectIds,cartoonid:cartoonid},
+                    success:function (data) {
+                        $.messager.alert('提示',data.msg);
+                        var params = {cartoonid:cartoonid};
+                        loadcartoonseriesList(params);
+                        $("#cartoonseriesForm").form('clear');
+                        dosearch();
                     },
                     error:function (data) {
                         var responseText = data.responseText;
@@ -180,7 +328,51 @@ $(function () {
     var params = {};
     loadcartoonList(params);
 
+    $("#deleteImg").click(function () {
+        var cartoonpic = $("#cartoonpic").val();
+        if($.trim(cartoonpic).length <= 0){
+            $.messager.alert('提示',"没有图片可以删除");
+            return;
+        }
+        $.messager.confirm("提示", "确定要删除该图片吗？",function () {
+            $.ajax({
+                type 		: "POST",
+                dataType 	: "json",
+                url 		: projectUrl + "/upload/deleteimg",
+                data		: {cartoonpic : cartoonpic,tablename:'cartooninfo',columnname:'cartoonpic'},
+                success		: function( result ) {
+                    if(result.code){
+                        $.messager.alert("提示", "删除成功");
+                        $("#result_img").attr('src', "");
+                        $("#cenopath").val("");
+                        $("#resultimg-div").hide();
+                        $("#upload-div").show();
+
+                    }else{
+                        $.messager.alert("提示", "网络请求出错,请联系管理员");
+                    }
+                },
+                error:function (data) {
+                    var responseText = data.responseText;
+                    if(responseText.indexOf("登出跳转页面") >= 0){
+                        ajaxErrorToLogin();
+                    }else{
+                        alert(JSON.stringify(data));
+                    }
+                }
+            });
+        });
+
+    });
+
 });
+
+function dosearch() {
+    var params = {};
+    params.cartoonname = $("#cartoonname4Search").val();
+    params.cartoontypedesc = $("#cartoontype4Search").val();
+    loadcartoonList(params);
+}
 
 function loadcartoonList(params){
     var dataList = getData("/consoles/cartoonList",params).dataList;
@@ -198,15 +390,134 @@ function loadcartoonList(params){
                 // ,formatter: function(value,row,index){
                 //     return "<a href=\"javascript:void 0;\" onclick='' title='" + value + "'>" + value +" </a>";
                 // }},
+            {field:"cartoonpic",title:"展示图",width:"150",
+                formatter: function(value,row,index){
+                    return "<img src=\"" + value + "\" width=\"100px\" height=\"50px\" />";// onclick=\"viewpic('" + value + "')\"
+                }},
+            {field:"cartoontypedesc",title:"类型",width:"120"},
             {field:"cartoonauthor",title:"作者",width:"80"},
             {field:"cartoonduration",title:"时长",width:"80"},
             {field:"cartoonlangue",title:"语言",width:"80"},
             {field:"cartoonseriesnum",title:"总集数",width:"80",
                 formatter: function(value,row,index){
-                    var html = "<a href=\"javascript:void 0\" onclick=\"viewseries('" + row.id + "')\" title='" + value + "' target='_blank'>导出 </a>";
+                    var html = "<a href=\"javascript:void 0\" onclick=\"viewseries('" + row.id + "')\" title='" + value + "'>" + value + " </a>";
                     return html;
                 }},
-            {field:"cartooninfo",title:"简介",width:"180",
+            {field:"playtimes",title:"播放次数",width:"80"},
+            {field:"cartooninfo",title:"简介",width:"250",
+                formatter: function(value,row,index){
+                    if($.trim(value).length > 0){
+                        return '<span title='+ value + '>'+value+'</span>';
+                    }
+                    return '';
+                }}
+            //     ,
+            // {field:"export",title:"操作",width:"300",
+            //     formatter: function(value,row,index){
+            //         var html = "<a href=\"" + projectUrl + "/output/exportfamily?familyId=" + row.id + "&familyname=" + row.familyName + "\" title='" + value + "' target='_blank'>导出 </a>";
+            //         html += "&nbsp;&nbsp;<a href=\"javascript:void 0;\" onclick=\"loadTab('','族谱合并','" + projectUrl + "/consoles/familyJoint?familyId=" + row.id + "&familyname=" + row.familyName + "')\" title='" + value + "'>合并 </a>";
+            //         return html;
+            //     }}
+        ]],
+        loadFilter:pagerFilter
+    });
+}
+
+function closeDialog(dialogId){
+    $("#" + dialogId).dialog("close");
+}
+
+function loadDataToForm(data) {
+
+    $("#cartoonId").val(data.id);
+    $("#cartoonname").val(data.cartoonname);
+    $("#cartoonauthor").val(data.cartoonauthor);
+    $("#cartoonlangue").val(data.cartoonlangue);
+    $("#cartoonarea").val(data.cartoonarea);
+    $("#cartoonduration").val(data.cartoonduration);
+    $("#cartoondub").val(data.cartoondub);
+    $("#cartoonversion").val(data.cartoonversion);
+    $("#cartoonurl").val(data.cartoonurl);
+    $("#cartooninfo").val(data.cartooninfo);
+    $("#cartoonpic").val(data.cartoonpic);
+
+    var imgPath = data.cartoonpic;
+    $("#result_img").attr('src', projectUrl + imgPath);
+    $("#result_img").show();
+    $("#resultimg-div").show();
+    $("#cartoonpic").attr('value', projectUrl + imgPath);
+    $("#upload-div").hide();
+
+    var cartoontypedesc = data.cartoontypedesc;
+
+    var chkcartoontype = $("input[name='cartoontype']");
+    for(var i=0;i<chkcartoontype.length;i++){
+        var ii = chkcartoontype[i];
+        $(ii).prop("checked",false);
+        var typedescstr = $(ii).attr("data-typename");
+        if(cartoontypedesc.indexOf(typedescstr) >= 0){
+            $(ii).prop("checked",true);
+        }
+
+    }
+}
+
+function loadDataToForm01(data) {
+    $("#cartoonseriesId").val(data.id);
+    $("#cartoonId4series").val(data.cartoonid);
+    $("#seriestitle").val(data.seriestitle);
+    $("#seriesnum").val(data.seriesnum);
+    $("#seriesduration").val(data.seriesduration);
+    $("#seriesurl").val(data.seriesurl);
+    $("#seriesinfo").val(data.seriesinfo);
+    $("#seriespic").val(data.seriespic);
+
+    var imgPath = data.seriespic;
+    $("#result_img01").attr('src', projectUrl + imgPath);
+    $("#result_img01").show();
+    $("#resultimg-div01").show();
+    $("#seriespic").attr('value', projectUrl + imgPath);
+    $("#upload-div01").hide();
+}
+
+function loadTab(tabId,tabTitle,tabUrl) {
+    parent.loadTab(tabId,tabTitle,tabUrl);
+}
+
+function viewseries(id) {
+    var params = {cartoonid:id};
+    loadcartoonseriesList(params);
+    $("#cartoonseriesListDialog").dialog('open');
+    $("#cartoonId4seriesbase").val(id);
+}
+
+function loadcartoonseriesList(params){
+    var dataList = getData("/consoles/serieslist",params);
+    $("#cartoonseriesList").datagrid({
+        data:dataList,
+        loadMsg:"加载中...",
+        selectOnCheck:true,
+        singleSelect:false,
+        nowrap: true,
+        columns:[[
+            {field:"ck",checkbox:"true"},
+            {field:"id",title:"id",width:"80",hidden:true},
+            {field:"seriesnum",title:"剧集",width:"200"
+                ,formatter: function(value,row,index){
+                    if($.trim(value).length > 0){
+                        return "第" + value + "集";
+                    }
+                    return "";
+            }},
+            {field:"seriestitle",title:"标题",width:"80"},
+            {field:"seriespic",title:"展示图",width:"150",
+                formatter: function(value,row,index){
+                    return "<img src=\"" + value + "\" width=\"100px\" height=\"50px\" />";// onclick=\"viewpic('" + value + "')\"
+                }},
+            {field:"seriesduration",title:"时长",width:"80"},
+            {field:"seriesurl",title:"链接",width:"150"},
+            {field:"playtimes",title:"播放次数",width:"80"},
+            {field:"seriesinfo",title:"简介",width:"180",
                 formatter: function(value,row,index){
                     if($.trim(value).length > 0){
                         if($.trim(value).length > 20){
@@ -215,82 +526,8 @@ function loadcartoonList(params){
                         return '<span title='+ value + '>'+value+'</span>';
                     }
                     return '';
-                }},
-            {field:"export",title:"操作",width:"300",
-                formatter: function(value,row,index){
-                    var html = "<a href=\"" + projectUrl + "/output/exportfamily?familyId=" + row.id + "&familyname=" + row.familyName + "\" title='" + value + "' target='_blank'>导出 </a>";
-                    html += "&nbsp;&nbsp;<a href=\"javascript:void 0;\" onclick=\"loadTab('','族谱合并','" + projectUrl + "/consoles/familyJoint?familyId=" + row.id + "&familyname=" + row.familyName + "')\" title='" + value + "'>合并 </a>";
-                    return html;
                 }}
         ]],
         loadFilter:pagerFilter
     });
-}
-
-function closeDialog(dialogId){
-    $("#familyForm").form('clear');
-    $("#" + dialogId).dialog("close");
-}
-
-function formatDataList(data){
-    if(data){
-
-        for(var i=0;i<data.length;i++){
-            data[i].createTime = new Date(data[i].createTime).Format("yyyy-MM-dd hh:mm:ss");
-        }
-    }
-    return data;
-}
-
-function loadDataToForm(data) {
-
-    $("#familyId").val(data.id);
-    $("#createMan").val(data.createMan);
-    var createTime = data.createTime;
-    if($.trim(createTime).length <= 0){
-        createTime = new Date().Format("yyyy-MM-dd hh:mm:ss");
-    }
-    $("#createTime4Modify").val(createTime);
-    $("#familyFirstName").val(data.familyFirstName);
-    $("#familyName").val(data.familyName);
-    $("#visitPassword").val(data.visitPassword);
-    $("#province").val(data.province);
-    $("#province").change();
-    $("#city").val(data.city);
-    $("#city").change();
-    $("#district").val(data.district);
-    $("#district").change();
-    $("#familyDesc").val(data.familyDesc);
-    $("#familyState").val(data.state);
-    $("#familyArea").val(0);
-
-    var visitStatus = data.visitStatus;
-    $("input:radio[name='visitStatus'][value = " + visitStatus + "]").prop("checked","checked");
-    $("input:radio[name='visitStatus'][value = " + visitStatus + "]").click();
-
-    var imgPath = data.photoUrl;
-    $("#result_img").attr('src',imgPath);
-    $("#result_img").show();
-    $("#imgFile").hide();
-    $("#photoUrl").attr('value',imgPath);
-    $("#show_img").mouseover(function(){
-        $("#result_img").attr('src',"/ImgFile/images/deleteImg.png");
-    });
-    $("#show_img").mouseout(function(){
-        $("#result_img").attr('src',imgPath);
-    });
-
-    $("#result_img").click(function(){
-        $("#result_img").hide();
-        $("#imgFile").show();
-        $("#photoUrl").removeAttr('value');
-        $("#show_img").unbind('mouseover');
-        $("#show_img").unbind('mouseout');
-
-    });
-}
-
-function loadTab(tabId,tabTitle,tabUrl) {
-    parent.loadTab(tabId,tabTitle,tabUrl);
-
 }

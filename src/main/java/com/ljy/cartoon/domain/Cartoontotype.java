@@ -14,6 +14,20 @@ public class Cartoontotype {
     private String typeid;
     private String cartoonid;
 
+    public Cartoontotype() {
+    }
+
+    public Cartoontotype(String id, String typeid, String cartoonid) {
+        this.id = id;
+        this.typeid = typeid;
+        this.cartoonid = cartoonid;
+    }
+
+    public Cartoontotype(String typeid, String cartoonid) {
+        this.typeid = typeid;
+        this.cartoonid = cartoonid;
+    }
+
     @Id
     @Column(name = "id")
     public String getId() {

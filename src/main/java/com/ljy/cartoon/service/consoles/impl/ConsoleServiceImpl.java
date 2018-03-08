@@ -112,6 +112,10 @@ public class ConsoleServiceImpl implements ConsoleService {
     public void saveResource(Consoleresource consoleresource) {
         int i = 0;
         //如果resource的ID大于0，则为修改
+        if(CommonUtil.isBlank(consoleresource.getId()) || "0".equals(consoleresource.getId())){
+            consoleresource.setId(CommonUtil.uuid());
+        }
+
         consoleresourceDao.save(consoleresource);
     }
 
@@ -159,7 +163,7 @@ public class ConsoleServiceImpl implements ConsoleService {
     public int saveAuth(Map<String,Object> params){
         int ii = 0;
 
-        String userId = params.get("userid") + "";
+        String userId = params.get("userId") + "";
         String sourceIds = params.get("sourceIds") + "";
         String[] sourceIdArr = sourceIds.split(",");
 

@@ -34,9 +34,6 @@ $(function () {
                                 loadDataGrid(params);
                                 $("#resourceForm").form('clear');
 
-                                // var params = {userId:parent.userId};
-                                // parent.loadMenuTree(params);
-
                                 closeDialog("resourceDialog");
 
                             }
@@ -75,7 +72,7 @@ $(function () {
 
     $("#toEdit").click(function () {
         $("#resourceForm").form('clear');
-        var selectRows = $("#roleList").datagrid('getSelections');
+        var selectRows = $("#resourceList").datagrid('getSelections');
         if(selectRows.length > 1){
             alert("只能编辑一条数据!");
             return;
@@ -84,8 +81,9 @@ $(function () {
             alert("请选择一条数据!");
             return;
         }
-        loadDataToForm(selectRows[0]);
         $("#parentSourceId").combobox("loadData", getResourceList(params));
+        loadDataToForm(selectRows[0]);
+
         $("#resourceDialog").dialog('open');
     });
 
@@ -101,7 +99,7 @@ $(function () {
         for(var i=0;i<selectRows.length;i++){
             var ii = selectRows[i];
             selectIds += "," + ii.id;
-            selectNames.push(ii.sourceName);
+            selectNames.push(ii.sourcename);
         }
         selectIds = selectIds.substring(1);
         $.messager.confirm('提示','确定要删除资源(' + selectNames + ')  吗?',function(r){
@@ -153,8 +151,8 @@ function loadDataGrid(params) {
         columns:[[
             {field:"ck",checkbox:"true"},
             {field:"id",title:"资源Id",width:"80",hidden:true},
-            {field:"sourceName",title:"资源名称",width:"200"},
-            {field:"sourceUrl",title:"资源链接",width:"200"},
+            {field:"sourcename",title:"资源名称",width:"200"},
+            {field:"sourceurl",title:"资源链接",width:"200"},
             {field:"resourceState",title:"状态",width:"80",
                 formatter: function(value,row,index){
                     if(value == 1){
@@ -168,28 +166,15 @@ function loadDataGrid(params) {
     });
 }
 
-function formatDataList(data){
-    if(data){
-
-        for(var i=0;i<data.length;i++){
-            if(data[i].state == 1){
-                data[i].stateDesc = "可用";
-            }else{
-                data[i].stateDesc = "不可用";
-            }
-        }
-    }
-    return data;
-}
-
 function loadDataToForm(data){
 
     $("#resourceId").val(data.id);
-    $("#sourceName").val(data.sourceName);
-    $("#sourceDesc").val(data.sourceDesc);
-    $("#sourceUrl").val(data.sourceUrl);
-    $("#parentSourceId").val(data._parentId);
-    $("#state").combobox("setValue",data.state);
+    $("#sourceName").val(data.sourcename);
+    $("#sourceDesc").val(data.sourcedesc);
+    $("#sourceUrl").val(data.sourceurl);
+    $("#parentSourceId").val(data.pid);
+    $("#parentSourceId").combobox("select",data.pid);
+    $("#state").combobox("select",data.resourceState);
 }
 
 function getResourceList(params){

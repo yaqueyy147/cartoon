@@ -73,41 +73,47 @@ public class ConsoleController {
         Map<String,Object> result = new HashMap<String,Object>();
         int i = 0;
 
-        JSONObject consolesUser = CookieUtil.cookieValueToJsonObject(request,"consoleUserInfo");
-        String userName = consolesUser.get("userName") + "";
+        try {
+            JSONObject consolesUser = CookieUtil.cookieValueToJsonObject(request,"consoleUserInfo");
+            String userName = consolesUser.get("userName") + "";
 
-        Map<String,Object> params = new HashMap<String,Object>();
-        
-        if(CommonUtil.isBlank(cartoonuser.getId()) || "0".equals(cartoonuser.getId())){//新建用户，需要设置加密密码
-            //检查用户名是否已经存在了
-            params.put("loginname",cartoonuser.getLoginname());
-            List<Cartoonuser> list = consoleService.getUserList(params);
-            if(list != null && list.size() > 0){
-                result.put("msg","该用户已存在!");
-                result.put("cartoonuser",cartoonuser);
-                result.put("code",99);
-                return result;
+            Map<String,Object> params = new HashMap<String,Object>();
+
+            if(CommonUtil.isBlank(cartoonuser.getId()) || "0".equals(cartoonuser.getId())){//新建用户，需要设置加密密码
+                //检查用户名是否已经存在了
+                params.put("loginname",cartoonuser.getLoginname());
+                List<Cartoonuser> list = consoleService.getUserList(params);
+                if(list != null && list.size() > 0){
+                    result.put("msg","该用户已存在!");
+                    result.put("cartoonuser",cartoonuser);
+                    result.put("code",99);
+                    return result;
+                }
+                cartoonuser.setUserfrom(2);
+                cartoonuser.setPassword(CommonUtil.string2MD5(cartoonuser.getPassword()));
+                cartoonuser.setCreateman(userName);
+                cartoonuser.setCreatedate(CommonUtil.getDateLong());
+                cartoonuser.setId(CommonUtil.uuid());
+
+            }else{//修改用户，不修改密码
+                params = new HashMap<String,Object>();
+                params.put("id",cartoonuser.getId());
+                List<Cartoonuser> list = consoleService.getUserList(params);
+                cartoonuser.setCreateman(list.get(0).getCreateman());
+                cartoonuser.setCreatedate(list.get(0).getCreatedate());
+                cartoonuser.setUserfrom(CommonUtil.parseInt(list.get(0).getUserfrom()));
+                cartoonuser.setPassword(consolesUser.get("password") + "");
             }
-            cartoonuser.setUserfrom(2);
-            cartoonuser.setPassword(CommonUtil.string2MD5(cartoonuser.getPassword()));
-            cartoonuser.setCreateman(userName);
-            cartoonuser.setCreatedate(CommonUtil.getDateLong());
-            cartoonuser.setId(CommonUtil.uuid());
+            consoleService.saveUser(cartoonuser);
 
-        }else{//修改用户，不修改密码
-            params = new HashMap<String,Object>();
-            params.put("id",cartoonuser.getId());
-            List<Cartoonuser> list = consoleService.getUserList(params);
-            cartoonuser.setCreateman(list.get(0).getCreateman());
-            cartoonuser.setCreatedate(list.get(0).getCreatedate());
-            cartoonuser.setUserfrom(CommonUtil.parseInt(list.get(0).getUserfrom()));
-            cartoonuser.setPassword(consolesUser.get("password") + "");
+            result.put("msg","保存成功!");
+            result.put("cartoonuser",cartoonuser);
+            result.put("code",1);
+        }catch (Exception e){
+            result.put("msg","系统错误，请联系管理员!");
+            result.put("cartoonuser",cartoonuser);
+            result.put("code",0);
         }
-        consoleService.saveUser(cartoonuser);
-
-        result.put("msg","保存成功!");
-        result.put("cartoonuser",cartoonuser);
-        result.put("code",i);
         return result;
     }
 

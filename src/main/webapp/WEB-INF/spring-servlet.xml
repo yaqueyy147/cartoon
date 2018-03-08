@@ -12,6 +12,9 @@
         default-lazy-init="true" default-autowire="byName" >
     <context:property-placeholder location="classpath:conf/sysglobal.properties"
                                   ignore-unresolvable="true" />
+
+    <mvc:resources mapping="/static/**" location="/static/" />
+
     <mvc:annotation-driven>
         <!--<mvc:message-converters register-defaults="true">-->
             <!--<bean class="org.springframework.http.converter.StringHttpMessageConverter">-->
@@ -66,7 +69,7 @@
         <property name="maxInMemorySize" value="1024000" />
     </bean>
 
-    <mvc:resources mapping="/static/**" location="/static/" />
+
 
     <!--<mvc:interceptors>-->
         <!--<mvc:interceptor>-->

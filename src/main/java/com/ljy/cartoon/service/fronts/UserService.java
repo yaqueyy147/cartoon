@@ -25,7 +25,7 @@ public interface UserService {
     public int modifyPassword(Map<String, Object> params);
 
     //修改头像
-    public int modifyPhoto(String userId, String photoPath, String userType);
+    public int modifyPhoto(String userId, String photoPath);
 
     //根据用户ID查询用户
     public Cartoonuser getUserInfoFromId(String userId);

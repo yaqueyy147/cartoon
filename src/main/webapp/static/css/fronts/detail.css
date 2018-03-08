@@ -1,0 +1,36 @@
+body{
+    /*background: url("../../images/bg-front.jpg") no-repeat;*/
+    /*filter:"progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod='scale')";*/
+    /*-webkit-background-size:cover;*/
+    /*-moz-background-size:cover;*/
+    /*background-size:cover;*/
+    /*background-attachment:fixed;*/
+    /*min-width: 1170px;*/
+    background-color: #F5F5F5 !important;
+}
+.playbody{
+    background-color: #242424 !important;
+}
+.cartooninfo{
+    height:400px;
+}
+.cartoonimg{
+    width:400px;
+    height:400px;
+    float: left;
+    margin-right: 20px;
+}
+.name01{
+    font-weight: bold;
+    font-size: 24px;
+}
+.name02{
+    opacity: 0.8;
+    font-size: 18px;
+}
+.td01{
+    width:50px;
+}
+.gailantt{
+    border-bottom: solid 4px #8a8a8a;
+}

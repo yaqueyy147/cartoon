@@ -10,7 +10,7 @@ import javax.servlet.http.HttpServletRequest;
  */
 public class Userutils {
 
-    public static final String FRONG_COOKIE_NAME = "userInfo";
+    public static final String FRONT_COOKIE_NAME = "userInfo";
     public static final String CONSOLE_COOKIE_NAME = "consoleUserInfo";
 
     public static Cartoonuser getcookieuser(HttpServletRequest request, String cookiename) throws Exception{

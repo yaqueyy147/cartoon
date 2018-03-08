@@ -52,28 +52,18 @@
             <button type="button" id="searchBtn" class="btn btn-default">查询</button>
         </form>
     </nav>
-    <div class="row" id="familyContent">
-        <c:forEach var="family" items="${familyList}">
+    <div class="row" id="cartoonContent">
+        <c:forEach var="cartoon" items="${cartoonlist}">
 
             <div class="col-sm-3 col-md-2 familyDiv">
                 <div class="thumbnail">
-                    <a href="javascript:void(0)" onclick="viewFamily('${family.id}','${family.visitStatus}','${family.visitPassword}')" style="float: none;width: 100%;">
-                        <img class="familyImgFF" src="${family.photoUrl}" class="img-thumbnail"/></a>
-                        <%--<img data-src="holder.js/300x300" alt="...">--%>
+                    <a href="<%=request.getContextPath()%>/fronts/cartoondetail?cartoonid=${cartoon.id}" style="float: none;width: 100%;" target="_blank">
+                        <img class="familyImgFF" src="${cartoon.cartoonpic}" class="img-thumbnail"/></a>
                     <div class="caption">
-                        <h6>${family.familyFirstName}（${family.id}）</h6>
-                            <%--<h6>世界何氏族谱（${family.id}）</h6>--%>
-                        <p>家族人数：${family.zspeopleCount}&nbsp;/&nbsp;${family.peopleCount}人</p>
-                            <%--<p>在世人数：${family.zspeopleCount}人</p>--%>
-                        <p>状态：
-                            <c:if test="${family.visitStatus == 0}">加密</c:if>
-                            <c:if test="${family.visitStatus == 1}">开放</c:if>
-                                <%--<c:if test="${family.visitStatus == 2}">仅族人查看</c:if>--%>
-
-                        </p>
-                        <p style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden">${family.familyName}</p>
-                        <p name="familyDesc" onmouseover="pPopover(this,1)" onmouseout="pPopover(this,2)" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden" data-container="body" data-toggle="popover" data-placement="right" data-content="${family.familyDesc}">
-                                ${family.familyDesc}
+                        <h6 style="text-align: center">${cartoon.cartoonname}</h6>
+                        <p>类型：${cartoon.cartoontypedesc}</p>
+                        <p name="familyDesc" onmouseover="pPopover(this,1)" onmouseout="pPopover(this,2)" style="text-overflow: ellipsis;white-space: nowrap;overflow: hidden" data-container="body" data-toggle="popover" data-placement="right" data-content="${cartoon.cartooninfo}">
+                                ${cartoon.cartooninfo}
                         </p>
                     </div>
                 </div>

@@ -4,6 +4,7 @@ import com.ljy.cartoon.domain.Cartoonuser;
 import com.ljy.cartoon.service.fronts.UserService;
 import com.ljy.cartoon.util.CommonUtil;
 import com.ljy.cartoon.util.CookieUtil;
+import com.ljy.cartoon.util.Userutils;
 import net.sf.json.JSONObject;
 import org.apache.log4j.Logger;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -70,7 +71,7 @@ public class SignInController {
         //如果用户存在则为个人用户，则登录，跳转首页
         if(listUser != null && listUser.size() > 0){
             //将用户信息添加到cookie
-            CookieUtil.addCookie("userInfo", JSONObject.fromObject(listUser.get(0)).toString(),response);
+            CookieUtil.addCookie(Userutils.FRONT_COOKIE_NAME, JSONObject.fromObject(listUser.get(0)).toString(),response);
             return new RedirectView(contextPath + "/fronts/index");
         }
         //否则跳回登录页面
@@ -195,13 +196,40 @@ public class SignInController {
             map.put("msg","原密码输入有误!");
             return map;
         }
-        params.put("userType",jsonUser.get("userType"));
         int i = userService.modifyPassword(params);
 
         map.put("code",i);
         map.put("msg","修改成功!");
         return map;
     }
+
+    /**
+     * 修改密码
+     * @param request
+     * @param params
+     * @return
+     * @throws UnsupportedEncodingException
+     */
+    @RequestMapping(value = "/modifyphoto")
+    @ResponseBody
+    public Map<String,Object> modifyphoto(HttpServletRequest request,@RequestParam Map<String,Object> params) throws UnsupportedEncodingException{
+        Map<String,Object> map = new HashMap<String,Object>();
+        try {
+            Cartoonuser cartoonuser = Userutils.getcookieuser(request,Userutils.FRONT_COOKIE_NAME);
+
+            String photoPath = params.get("photoPath") + "";
+
+            int i = userService.modifyPhoto(cartoonuser.getId(),photoPath);
+
+            map.put("code",i);
+            map.put("msg","修改成功!");
+        }catch (Exception e){
+            map.put("code",0);
+            map.put("msg","修改失败!");
+        }
+        return map;
+    }
+
     /**
      * 登录失效或者用户信息验证失败跳转页面
      * @param model

@@ -12,19 +12,20 @@ import java.util.Date;
 @Entity
 public class Cartooninfo {
     private String id;
-    private String cartoonname;
-    private String cartoontyperel;
-    private String cartoonauthor;
-    private String cartoonduration;
-    private String cartoonarea;
-    private String cartooninfo;
-    private String cartoonseriesnum;
-    private String cartoonlangue;
-    private String cartoonversion;
-    private String cartoondub;
-    private String cartoonurl;
-    private String cartoonpic;
-    private String playtimes;
+    private String cartoonname;//名称/标题
+    private String cartoontypedesc;
+    private String cartoonauthor;//作者
+    private String cartoonduration;//时长：xx分xx秒
+    private String cartoonarea;//属地
+    private String cartooninfo;//简介
+    private String cartoonseriesnum;//总集数
+    private String cartoonyear;//年份
+    private String cartoonlangue;//语言
+    private String cartoonversion;//版本
+    private String cartoondub;//配音
+    private String cartoonurl;//链接：如果是电影类的，需要填链接直接播放
+    private String cartoonpic;//动漫展示图片
+    private String playtimes;//播放次数
     private String remark;
     private String deleteflag;
     private Date createdate;
@@ -52,13 +53,13 @@ public class Cartooninfo {
     }
 
     @Basic
-    @Column(name = "cartoontyperel")
-    public String getCartoontyperel() {
-        return cartoontyperel;
+    @Column(name = "cartoontypedesc")
+    public String getCartoontypedesc() {
+        return cartoontypedesc;
     }
 
-    public void setCartoontyperel(String cartoontyperel) {
-        this.cartoontyperel = cartoontyperel;
+    public void setCartoontypedesc(String cartoontypedesc) {
+        this.cartoontypedesc = cartoontypedesc;
     }
 
     @Basic
@@ -109,6 +110,16 @@ public class Cartooninfo {
 
     public void setCartoonseriesnum(String cartoonseriesnum) {
         this.cartoonseriesnum = cartoonseriesnum;
+    }
+
+    @Basic
+    @Column(name = "cartoonyear")
+    public String getCartoonyear() {
+        return cartoonyear;
+    }
+
+    public void setCartoonyear(String cartoonyear) {
+        this.cartoonyear = cartoonyear;
     }
 
     @Basic
@@ -230,7 +241,7 @@ public class Cartooninfo {
 
         if (id != null ? !id.equals(that.id) : that.id != null) return false;
         if (cartoonname != null ? !cartoonname.equals(that.cartoonname) : that.cartoonname != null) return false;
-        if (cartoontyperel != null ? !cartoontyperel.equals(that.cartoontyperel) : that.cartoontyperel != null)
+        if (cartoontypedesc != null ? !cartoontypedesc.equals(that.cartoontypedesc) : that.cartoontypedesc != null)
             return false;
         if (cartoonauthor != null ? !cartoonauthor.equals(that.cartoonauthor) : that.cartoonauthor != null)
             return false;
@@ -239,6 +250,8 @@ public class Cartooninfo {
         if (cartoonarea != null ? !cartoonarea.equals(that.cartoonarea) : that.cartoonarea != null) return false;
         if (cartooninfo != null ? !cartooninfo.equals(that.cartooninfo) : that.cartooninfo != null) return false;
         if (cartoonseriesnum != null ? !cartoonseriesnum.equals(that.cartoonseriesnum) : that.cartoonseriesnum != null)
+            return false;
+        if (cartoonyear != null ? !cartoonyear.equals(that.cartoonyear) : that.cartoonyear != null)
             return false;
         if (cartoonlangue != null ? !cartoonlangue.equals(that.cartoonlangue) : that.cartoonlangue != null)
             return false;
@@ -261,12 +274,13 @@ public class Cartooninfo {
     public int hashCode() {
         int result = id != null ? id.hashCode() : 0;
         result = 31 * result + (cartoonname != null ? cartoonname.hashCode() : 0);
-        result = 31 * result + (cartoontyperel != null ? cartoontyperel.hashCode() : 0);
+        result = 31 * result + (cartoontypedesc != null ? cartoontypedesc.hashCode() : 0);
         result = 31 * result + (cartoonauthor != null ? cartoonauthor.hashCode() : 0);
         result = 31 * result + (cartoonduration != null ? cartoonduration.hashCode() : 0);
         result = 31 * result + (cartoonarea != null ? cartoonarea.hashCode() : 0);
         result = 31 * result + (cartooninfo != null ? cartooninfo.hashCode() : 0);
         result = 31 * result + (cartoonseriesnum != null ? cartoonseriesnum.hashCode() : 0);
+        result = 31 * result + (cartoonyear != null ? cartoonyear.hashCode() : 0);
         result = 31 * result + (cartoonlangue != null ? cartoonlangue.hashCode() : 0);
         result = 31 * result + (cartoonversion != null ? cartoonversion.hashCode() : 0);
         result = 31 * result + (cartoondub != null ? cartoondub.hashCode() : 0);

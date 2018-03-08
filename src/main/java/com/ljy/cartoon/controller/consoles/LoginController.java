@@ -87,8 +87,8 @@ public class LoginController {
 
             JSONObject jsonObject = JSONObject.fromObject(list.get(0));
             //登录成功，将用户信息记录到cookie
-            CookieUtil.addCookie("consoleUserInfo",jsonObject.toString(),response);
-            model.addAttribute("consoleUserInfo",jsonObject);
+            CookieUtil.addCookie(Userutils.CONSOLE_COOKIE_NAME,jsonObject.toString(),response);
+            model.addAttribute(Userutils.CONSOLE_COOKIE_NAME,jsonObject);
             return new ModelAndView("/consoles/main");
         }
 

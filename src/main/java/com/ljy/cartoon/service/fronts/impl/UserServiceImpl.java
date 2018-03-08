@@ -113,7 +113,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public int modifyPhoto(String userId, String photoPath, String userType) {
+    public int modifyPhoto(String userId, String photoPath) {
 
         String sql = "update cartoonuser set userphoto=? where id=?";
 

@@ -17,7 +17,7 @@ public class Consoleresource {
     private Integer sourcelevel;
     private Integer sourcetype;
     private String sourceurl;
-    private Integer parentsourceid;
+    private String parentsourceid;
     private String parentsourcecode;
     private Integer state;
 
@@ -93,11 +93,11 @@ public class Consoleresource {
 
     @Basic
     @Column(name = "parentsourceid")
-    public Integer getParentsourceid() {
+    public String getParentsourceid() {
         return parentsourceid;
     }
 
-    public void setParentsourceid(Integer parentsourceid) {
+    public void setParentsourceid(String parentsourceid) {
         this.parentsourceid = parentsourceid;
     }
 

@@ -40,7 +40,7 @@ public class CartoontypeController {
     @RequestMapping(value = "/typelist")
     @ResponseBody
     public Object typelist(@RequestParam Map<String,Object> params){
-        List<Cartoontype> typelist = cartoontypeDao.find(params);
+        List<Cartoontype> typelist = cartoonService.getCartoontypeList(params);
         return typelist;
     }
 
@@ -58,15 +58,17 @@ public class CartoontypeController {
                 cartoontype.setRemark(old.getRemark());
             }else{
                 cartoontype.setId(CommonUtil.uuid());
-                cartoontype.setCreateid(Userutils.getuserid(request,Userutils.FRONG_COOKIE_NAME));
-                cartoontype.setCreatename(Userutils.getusername(request,Userutils.FRONG_COOKIE_NAME));
+                cartoontype.setCreateid(Userutils.getuserid(request,Userutils.CONSOLE_COOKIE_NAME));
+                cartoontype.setCreatename(Userutils.getusername(request,Userutils.CONSOLE_COOKIE_NAME));
                 cartoontype.setCreatedate(new Date());
             }
             cartoontypeDao.save(cartoontype);
             result.put("code",1);
+            result.put("msg","保存成功");
         }catch (Exception e){
             e.printStackTrace();
             result.put("code",0);
+            result.put("msg","保存失败");
         }
         return result;
     }
@@ -78,9 +80,11 @@ public class CartoontypeController {
         try {
             int i = cartoonService.deletesomething(ids,"cartoontype");
             result.put("code",1);
+            result.put("msg","删除成功");
         }catch (Exception e){
             e.printStackTrace();
             result.put("code",0);
+            result.put("msg","删除失败");
         }
         return result;
     }

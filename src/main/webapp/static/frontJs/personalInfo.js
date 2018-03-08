@@ -4,21 +4,11 @@
 $(function () {
 
     $("#regedit").click(function () {
-        var idCard = $("#idCard").val();
-        var idCardPhoto = $("#idCardPhoto").val();
         var phone = $("#phone").val();
         var province = $("#province").val();
         var city = $("#city").val();
         var district = $("#district").val();
 
-        if($.trim(idCard).length != 18 && $.trim(idCard).length != 15){
-            alert("身份证号输入有误！");
-            return ;
-        }
-        if($.trim(idCardPhoto).length <= 0){
-            alert("请上传身份证照片！");
-            return ;
-        }
         if($.trim(province).length <= 0){
             alert("请选择省！");
             return ;
@@ -104,30 +94,6 @@ $(function () {
         }
     });
 
-    $("#applyVolunteer").click(function () {
-        $.ajax({
-            type:'post',
-            url: projectUrl + '/family/applyVolunteer',
-            dataType: 'json',
-            data:{},
-            // async:false,
-            success:function (data) {
-                if(data.code >= 1){
-                    alert(data.msg);
-                    $("#applyVolunteer").replaceWith("<span>已申请修订族谱，请等待审核！</span>");
-                }
-            },
-            error:function (data) {
-                var responseText = data.responseText;
-                if(responseText.indexOf("登出跳转页面") >= 0){
-                    ajaxErrorToLogin();
-                }else{
-                    alert(JSON.stringify(data));
-                }
-            }
-        });
-    });
-
     $("#toModify-photo").click(function () {
         var photoPath = $("#photoUrl").val();
         $.ajax({
@@ -154,50 +120,4 @@ $(function () {
             }
         });
     });
-
-    $("#userMoney").click(function () {
-        $.ajax({
-            type:'post',
-            url: projectUrl + "/company/moneyList",
-            dataType:'json',
-            data:{"userId" : userId, "type" : 1},
-            success:function (data) {
-            	var moneyHtml = "<tr><th>序号</th><th>充值金额</th><th>充值说明</th><th>充值时间</th><th>充值人</th></tr><tr>";
-                if(data){
-                    var moneyList = data.dataList;
-                    
-                    for(var i=0;i<moneyList.length;i++){
-                        var ii = moneyList[i];
-                        moneyHtml  += "<td>" + (i+1) + "</td>";
-                        moneyHtml  += "<td>" + ii.payMoney + "</td>";
-                        moneyHtml  += "<td>" + ii.payDesc + "</td>";
-                        moneyHtml  += "<td>" + ii.payTime + "</td>";
-                        moneyHtml  += "<td>" + ii.payMan + "</td>";
-                    }
-                    moneyHtml += "</tr>";
-                    
-                }
-                $("#moneyTable").html(moneyHtml);
-                $("#moneyModal").modal('show');
-            },
-            error:function (data) {
-                var responseText = data.responseText;
-                if(responseText.indexOf("登出跳转页面") >= 0){
-                    ajaxErrorToLogin();
-                }else{
-                    alert(JSON.stringify(data));
-                }
-            }
-        });
-
-    });
-
-    $('#myFamilyTabLi a').on('shown.bs.tab', function (e) {
-        var myFamilyUrl = projectUrl + "/family/personalIndex";
-        $("#myFamilyTab iframe").attr("src",myFamilyUrl);
-    });
-    $('#includeFamilyTabLi a').on('shown.bs.tab', function (e) {
-        var myFamilyUrl = projectUrl + "/family/includeFamily";
-        $("#includeFamilyTab iframe").attr("src",myFamilyUrl);
-    })
 });
